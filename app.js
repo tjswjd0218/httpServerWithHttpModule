@@ -59,3 +59,33 @@ server.listen(8000, "127.0.0.1", function () {
   console.log("Listening to requests on port 8000");
 });
 
+
+
+const postUpListener = function (request, response) {
+  const { url, method } = request;
+  if (method === "POST") {
+    if (url === "/posts") {
+      let body = "";
+      request.on("data", (data) => {
+        body += data;
+      });
+
+      request.on("end", () => {
+        posts.push({
+          id: posts.id,
+          title: posts.title,
+          content: posts.content,
+          userId: posts.userId,
+        });
+        response.end(JSON.stringify({ message: "postCreated" }));
+      });
+    }
+  }
+};
+
+server.on("request", postUpListener);
+
+server.listen(8000, "127.0.0.1", function () {
+  console.log("Listening to requests on port 8000");
+});
+
